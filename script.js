@@ -4,13 +4,15 @@ const playAgainBtn = document.getElementById('play-button');
 const popup = document.getElementById('popup-container');
 const notification = document.getElementById('notification-container');
 const finalMessage = document.getElementById('final-message');
+const finalMessageRevealWord = document.getElementById('final-message-reveal-word');
 
 const figureParts = document.querySelectorAll('.figure-part');
 
 const words = ['applications', 'programming', 'interface','wizard', 'witch',  'curious', 'wonderful'];
 
-
 let selectedWord = words[Math.floor(Math.random() * words.length)];
+
+let playable = true;
 
 const correctLetters = [];
 const wrongLetters = [];
@@ -30,11 +32,13 @@ function displayWord() {
             .join('')}
     `;
 
-    const innerWord = wordEl.innerText.replace(/\n/g, '');
+    const innerWord = wordEl.innerText.replace(/[\n]/g, '');
 
     if (innerWord === selectedWord) {
         finalMessage.innerText = 'Congratulations! You won! 😃';
         popup.style.display = 'flex';
+
+        playable = false;
     }
 }
 
@@ -50,7 +54,7 @@ function updateWrongLettersEl() {
     figureParts.forEach((part, index) => {
         const errors = wrongLetters.length;
 
-        if(index < errors) {
+        if (index < errors) {
             part.style.display = 'block';
         } else {
             part.style.display = 'none';
@@ -58,7 +62,7 @@ function updateWrongLettersEl() {
     });
 
     // Check if lost
-    if(wrongLetters.length === figureParts.length) {
+    if (wrongLetters.length === figureParts.length) {
         finalMessage.innerText = 'Unfortunately you lost. 😕';
         popup.style.display = 'flex';
     }
@@ -100,6 +104,8 @@ window.addEventListener('keydown', e => {
 
 // Restart game and play again
 playAgainBtn.addEventListener('click', () => {
+    playable = true;
+
     // Empty arrays
     correctLetters.splice(0);
     wrongLetters.splice(0);
