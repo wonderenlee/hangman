@@ -8,7 +8,7 @@ const finalMessageRevealWord = document.getElementById('final-message-reveal-wor
 
 const figureParts = document.querySelectorAll('.figure-part');
 
-const words = ['applications', 'programming', 'interface','wizard', 'witch',  'curious', 'wonderful'];
+const words = ['application', 'programming', 'interface', 'wizard', 'witch',  'curious', 'wonderful'];
 
 let selectedWord = words[Math.floor(Math.random() * words.length)];
 
@@ -32,10 +32,11 @@ function displayWord() {
             .join('')}
     `;
 
-    const innerWord = wordEl.innerText.replace(/[\n]/g, '');
+    const innerWord = wordEl.innerText.replace(/[ \n]/g, '');
 
     if (innerWord === selectedWord) {
         finalMessage.innerText = 'Congratulations! You won! 😃';
+        finalMessageRevealWord.innerText = '';
         popup.style.display = 'flex';
 
         playable = false;
@@ -64,39 +65,44 @@ function updateWrongLettersEl() {
     // Check if lost
     if (wrongLetters.length === figureParts.length) {
         finalMessage.innerText = 'Unfortunately you lost. 😕';
+		finalMessageRevealWord.innerText = `...the word was: ${selectedWord}`;
         popup.style.display = 'flex';
+
+        playable = false;
     }
 }
 
 // Show notification
 function showNotification() {
-    notification.classLists.add('show');
+    notification.classList.add('show');
 
     setTimeout(() => {
-        notification.classLists.remove('show');
+        notification.classList.remove('show');
 
     }, 2000);
 }
 // Keydown letter press
 window.addEventListener('keydown', e => {
-    // console.log(e.keyCode);
-    if (e.keyCode >= 65 && e.keyCode <= 90) {
-        const letter = e.key;
-        if(selectedWord.includes(letter)) {
-            if(!correctLetters.includes(letter)) {
-                correctLetters.push(letter);
+    if (playable) { 
+        // console.log(e.keyCode);
+        if (e.keyCode >= 65 && e.keyCode <= 90) {
+            const letter = e.key;
+            if(selectedWord.includes(letter)) {
+                if(!correctLetters.includes(letter)) {
+                    correctLetters.push(letter);
 
-                displayWord();
+                    displayWord();
+                } else {
+                    showNotification();
+                }
             } else {
-                showNotification();
-            }
-        } else {
-            if(!wrongLetters.includes(letter)) {
-                wrongLetters.push(letter);
+                if(!wrongLetters.includes(letter)) {
+                    wrongLetters.push(letter);
 
-                updateWrongLettersEl();
-            } else {
-                showNotification();
+                    updateWrongLettersEl();
+                } else {
+                    showNotification();
+                }
             }
         }
     }
