@@ -86,9 +86,9 @@ window.addEventListener('keydown', e => {
     if (playable) { 
         // console.log(e.keyCode);
         if (e.keyCode >= 65 && e.keyCode <= 90) {
-            const letter = e.key;
-            if(selectedWord.includes(letter)) {
-                if(!correctLetters.includes(letter)) {
+            const letter = e.key.toLowerCase();
+            if (selectedWord.includes(letter)) {
+                if (!correctLetters.includes(letter)) {
                     correctLetters.push(letter);
 
                     displayWord();
@@ -96,7 +96,7 @@ window.addEventListener('keydown', e => {
                     showNotification();
                 }
             } else {
-                if(!wrongLetters.includes(letter)) {
+                if (!wrongLetters.includes(letter)) {
                     wrongLetters.push(letter);
 
                     updateWrongLettersEl();
